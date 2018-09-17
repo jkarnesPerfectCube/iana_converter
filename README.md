@@ -7,7 +7,7 @@ Using this Gem
 iana_converter is the first gem I have ever written. As such, it is implemented simply and its use is simple:
 ### Rails / Bundler
 1. Add to your gemfile `iana_converter`
-2. In whatever model you are trying to persist IANA timezones with `include iana_converter`
+2. In whatever model you are trying to persist IANA timezones with `include IANA_Converter`
 3. Instead of `model.timezone = 'America/Unsupported'` do `model.timezone = rails_timezone_for 'America/Unsupported'`
 ### Not Rails
 1. `gem install iana_converter`
