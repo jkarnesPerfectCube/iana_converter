@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  File: README
+  
+    &mdash; Documentation by YARD 0.9.15
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  pathId = "README";
+  relpath = '';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="file_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="_index.html">Index</a> &raquo; 
+    <span class="title">File: README</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><div id='filecontents'>
+<h1 id="label-iana_converter">iana_converter</h1>
+
+<p>iana_converter is a gem designed with a singular goal: <em>to provide a
+complete IANA/OLSON mapping to what Rails deems as “important”
+timezones.</em></p>
+
+<h2 id="label-Using+this+Gem">Using this Gem</h2>
+
+<p>iana_converter is the first gem I have ever written. As such, it is
+implemented simply and its use is simple:</p>
+
+<h3 id="label-Rails+-2F+Bundler">Rails / Bundler</h3>
+<ol><li>
+<p>Add to your gemfile <code>iana_converter</code></p>
+</li><li>
+<p>In whatever model you are trying to persist IANA timezones with
+<code>include iana_converter</code></p>
+</li><li>
+<p>Instead of <code>model.timezone = &#39;America/Unsupported&#39;</code> do
+<code>model.timezone = rails_timezone_for
+&#39;America/Unsupported&#39;</code></p>
+
+<h3 id="label-Not+Rails">Not Rails</h3>
+</li><li>
+<p><code>gem install iana_converter</code></p>
+</li><li>
+<p><code>require &#39;iana_converter</code></p>
+</li><li>
+<p><code>include iana_converter</code></p>
+</li><li>
+<p>Call <code>rails_timezone_for &#39;Unsupported/Timezone</code> and the
+“correct” string will be returned.</p>
+</li></ol>
+
+<h2 id="label-Why+are+there+no+tests-3F">Why are there no tests?</h2>
+
+<p>The implementation of this gem is <em>rudimentary.</em> There is <em>1</em>
+method which simply calls a constant hash. If I were to test the hash, that
+would be testing Ruby Core functionality. Testing the contents of the hash
+is un-necessary because once the mapping is created it should only ever be
+altered if Timezone Standards change.</p>
+
+<h2 id="label-Why+is+only+the+USA+supported-3F">Why is only the USA supported?</h2>
+
+<p>This gem was a conversion of an internal piece of code that we use at
+PerfectCube to make sure that non-supported time zones do not get
+persisted. At the time of this writing, we only have one international
+location who is based in Canada and uses US time.</p>
+
+<h2 id="label-But+I+want+international+timezones+-2F+timezones+for+my+country-21+-28AKA-3A+Contributing-29">But I want international timezones / timezones for my country! (AKA: Contributing)</h2>
+
+<p>Feel free to make the mapping then and submit a PR. It will be checked for
+correctness before being accepted. Here is how we made our mapping: 1. Load
+the tzinfo gem: <code>require &#39;tzinfo&#39;</code> 2. Set up a reference
+to the country you are mapping: <code>c =
+TZInfo::Country.get(&#39;US&#39;)</code> (from ISO 3166-1 country codes) 
+1. If you don&#39;t know your country code, you can see all available codes
+supported with <code>TZInfo::Country.all_codes</code> 3. Now find out what
+IANA/OLSON timezones your country contains with <code>c.zones</code> 4.
+Make a big list of the zones your country has with the abbreviation they
+represent: <code>c.zones.each { |z| puts &quot;#{z.name} maps to
+#{z.period_for_local(Time.now).abbreviation}&quot; }</code> 5. Go find the
+Timezone string that rails associates with that abbreviation:
+<code>ActiveSupport::TimeZone.all.each { |tz| puts &quot;#{tz.tzinfo.name}
+maps to #{tz.tzinfo.current_period.abbreviation}&quot; }</code> 6. Either
+hand-match the timezones or parse them out with a script to generate a
+mapping similar to the mapping in <code>lib/mappings/us_mapping.rb</code>
+7. Fork this. 8. Add your mapping in a mapping file and submit a PR 9.
+Enjoy.</p>
+
+<h2 id="label-If+the+process+is+that+easy-2C+why+didn-27t+you+just+automate+it+with+two+maps+and+a+join-3F">If the process is that easy, why didn&#39;t you just automate it with two maps and a join?</h2>
+
+<p>Timezone Abbreviations are not unique. <a
+href="https://github.com/tzinfo/tzinfo/issues/38">This issue has been
+brought up before</a> and solved in an elegant gem by davispuh called <a
+href="https://github.com/davispuh/TimezoneParser">TimezoneParser</a>. We
+personally thought that introducing the level of information that gem uses
+did not fit our use case and thus developed this simplistic lookup table.
+If you feel you need the full power of the TimezoneParser gem, by all
+means, go forth and use it! If you want something simple and with a small
+footprint, use us.</p>
+</div></div>
+
+      <div id="footer">
+  Generated on Sat Sep 15 10:48:42 2018 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.15 (ruby-2.3.4).
+</div>
+
+    </div>
+  </body>
+</html>

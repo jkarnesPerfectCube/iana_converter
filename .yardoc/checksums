@@ -1,0 +1,3 @@
+lib/iana_converter.rb 4da31abc6510604eaa8cd77db7340243212e2010
+lib/mappings/ca_mapping.rb 12c123f3fdb51d3217310e4dc96b15e07c4965b5
+lib/mappings/us_mapping.rb aa4ac5f0d91f03bff686ef47ea04840c7338bddc
